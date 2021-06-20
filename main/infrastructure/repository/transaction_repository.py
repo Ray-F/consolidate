@@ -26,7 +26,7 @@ class TransactionRepository:
 
     entityMapper = TransactionEntityMapper()
 
-    def __init__(self, mongo_service: MongoService) -> object:
+    def __init__(self, mongo_service: MongoService):
         self.__transactions_collection = mongo_service.collection("transactions")
 
     def get_all_transactions(self):
