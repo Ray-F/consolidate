@@ -1,7 +1,7 @@
 from typing import Any
 from flask.json import JSONEncoder
 
-from main.domain.util.entities import Dto
+from main.domain.common.entities import Dto
 
 
 class MongoJSONEncoder(JSONEncoder):

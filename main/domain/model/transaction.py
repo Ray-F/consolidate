@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from main.domain.util.entities import DomainModel
+from main.domain.common.entities import DomainModel
 
 
 class Transaction(DomainModel):

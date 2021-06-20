@@ -1,6 +1,6 @@
 from typing import Any
 
-from main.domain.util.entities import DomainModel
+from main.domain.common.entities import DomainModel
 
 
 class DomainModelMapper:

@@ -1,9 +1,9 @@
+from datetime import datetime
 from enum import Enum
 
-from main.domain.util.entities import DomainModel
+from main.domain.common.entities import DomainModel, ValueObject
 from .transaction import Transaction
 from typing import List
-from ..value_object.snapshot import Snapshot
 
 
 class AccountType(Enum):
@@ -12,6 +12,15 @@ class AccountType(Enum):
     BNZ = "BNZ"
     SHARESIES = "SHARESIES"
     SIMPLICITY = "SIMPLICITY"
+
+
+class Snapshot(ValueObject):
+
+    def __init__(self, date: datetime, amount: float) -> None:
+        super().__init__()
+
+        self.date = date
+        self.amount = amount
 
 
 class Account(DomainModel):

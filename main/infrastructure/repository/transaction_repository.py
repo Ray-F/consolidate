@@ -1,8 +1,8 @@
 from bson import ObjectId
 
 from main.domain.model.transaction import Transaction
-from main.domain.util.domain_mapper import DomainModelMapper
-from main.service.mongo_service import MongoService
+from main.domain.common.domain_mapper import DomainModelMapper
+from main.infrastructure.mongo_service import MongoService
 
 
 class TransactionEntityMapper(DomainModelMapper):
@@ -26,7 +26,7 @@ class TransactionRepository:
 
     entityMapper = TransactionEntityMapper()
 
-    def __init__(self, mongo_service: MongoService):
+    def __init__(self, mongo_service: MongoService) -> object:
         self.__transactions_collection = mongo_service.collection("transactions")
 
     def get_all_transactions(self):
