@@ -24,7 +24,7 @@ class DomainModelMapper:
 
 class ValueObjectMapper:
 
-    def from_object(self, value_object: ValueObject) -> dict:
+    def from_object(self, value_object: ValueObject) -> Any:
         """
         Converts a value object to any other model.
 

@@ -1,20 +1,19 @@
 class DomainModel:
+    """
+    A domain entity that should encapsulate the core business logic (alongside a `DomainService`).
+    """
 
-    def __init__(self):
-        """
-        A domain model.
-        """
 
 class ValueObject:
+    """
+    A domain data entity used to store data in the application, and is never persisted. Always re-constructable
+    from persisted data (usually encapsulated by a `DomainModel`).
+    """
 
-    def __init__(self):
-        """
-        A value object.
-        """
 
 class Dto:
+    """
+    A data transfer object (DTO).
 
-    def __init__(self):
-        """
-        A DTO.
-        """
+    Must have JSON serializable fields (i.e. of mostly primitive types).
+    """
