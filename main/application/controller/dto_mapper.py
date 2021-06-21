@@ -1,6 +1,6 @@
 from typing import List
 
-from main.domain.model.account import Account, AccountType, Snapshot, Transaction
+from main.domain.model.account_aggregate import Account, AccountType, Snapshot, Transaction
 from main.domain.common.domain_mapper import DomainModelMapper, ValueObjectMapper
 from main.domain.common.entities import Dto, DomainModel
 from main.util.localdatetime import parse_isostring_with_tz

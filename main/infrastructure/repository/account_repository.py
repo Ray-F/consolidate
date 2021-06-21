@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 from typing import List
 
-from main.domain.model.account import Account, AccountType, Transaction, Snapshot
+from main.domain.model.account_aggregate import Account, AccountType, Transaction, Snapshot
 from main.infrastructure.mongo_service import MongoService
 from main.infrastructure.repository.entity_mapper import AccountEntityMapper
 

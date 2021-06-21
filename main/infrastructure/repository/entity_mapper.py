@@ -3,7 +3,7 @@ from typing import Any
 from bson import ObjectId
 
 from main.domain.common.domain_mapper import DomainModelMapper, ValueObjectMapper
-from main.domain.model.account import Account, AccountType, Snapshot, Transaction
+from main.domain.model.account_aggregate import Account, AccountType, Snapshot, Transaction
 
 
 class TransactionEntityMapper(ValueObjectMapper):
