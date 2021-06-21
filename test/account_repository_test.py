@@ -2,7 +2,8 @@ import os
 import unittest
 from datetime import datetime
 
-from main.domain.model.account_aggregate import Transaction, Snapshot, Account, AccountType
+from main.domain.model.account_aggregate import Transaction, Account, AccountType
+from main.domain.model.snapshot import Snapshot
 from main.infrastructure.mongo_service import MongoService
 from main.infrastructure.repository.account_repository import AccountRepository
 

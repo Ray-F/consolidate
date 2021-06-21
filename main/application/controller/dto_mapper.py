@@ -1,8 +1,9 @@
 from typing import List
 
-from main.domain.model.account_aggregate import Account, AccountType, Snapshot, Transaction
+from main.domain.model.account_aggregate import Account, AccountType, Transaction
 from main.domain.common.domain_mapper import DomainModelMapper, ValueObjectMapper
 from main.domain.common.entities import Dto, DomainModel
+from main.domain.model.snapshot import Snapshot
 from main.util.localdatetime import parse_isostring_with_tz
 
 
@@ -60,13 +61,12 @@ class TransactionDtoMapper(ValueObjectMapper):
 
 
 class AccountDtoMapper(DomainModelMapper):
+    snapshot_mapper = SnapshotDtoMapper()
+    transaction_mapper = TransactionDtoMapper()
 
     def from_domain_model(self, account: Account) -> AccountDto:
-        snapshot_mapper = SnapshotDtoMapper()
-        transaction_mapper = TransactionDtoMapper()
-
-        transactions = [transaction_mapper.from_object(transaction) for transaction in account.transactions]
-        snapshots = [snapshot_mapper.from_object(model) for model in account.snapshots]
+        transactions = [self.transaction_mapper.from_object(transaction) for transaction in account.transactions]
+        snapshots = [self.snapshot_mapper.from_object(model) for model in account.snapshots]
 
         return AccountDto(id=str(account.id),
                           name=account.name,
@@ -78,5 +78,5 @@ class AccountDtoMapper(DomainModelMapper):
         return Account(account_id=model.id,
                        name=model.name,
                        account_type=AccountType[model.account_type],
-                       transactions=[self.__transaction_mapper.to_object(dto) for dto in model.transactions],
-                       snapshots=[self.__snapshot_mapper.to_object(dto) for dto in model.snapshots])
+                       transactions=[self.transaction_mapper.to_object(dto) for dto in model.transactions],
+                       snapshots=[self.snapshot_mapper.to_object(dto) for dto in model.snapshots])

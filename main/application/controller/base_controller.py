@@ -1,13 +1,11 @@
-import datetime
 import os
 
-from flask import jsonify, Response
+from flask import jsonify
 from flask_graphql import GraphQLView
 from graphene import Schema
 
 from main.application.controller.dto_mapper import AccountDtoMapper
 from main.application.controller.graph_controller import RootQuery
-from main.domain.model.account_aggregate import Account, AccountType, Transaction, Snapshot
 from main.infrastructure.mongo_service import MongoService
 from main.infrastructure.repository.account_repository import AccountRepository
 

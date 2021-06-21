@@ -4,6 +4,8 @@ from enum import Enum
 from main.domain.common.entities import DomainModel, ValueObject
 from typing import List
 
+from main.domain.model.snapshot import Snapshot
+
 
 class AccountType(Enum):
 
@@ -11,15 +13,6 @@ class AccountType(Enum):
     BNZ = "BNZ"
     SHARESIES = "SHARESIES"
     SIMPLICITY = "SIMPLICITY"
-
-
-class Snapshot(ValueObject):
-
-    def __init__(self, date: datetime, amount: float) -> None:
-        super().__init__()
-
-        self.date = date
-        self.amount = amount
 
 
 class Transaction(ValueObject):
