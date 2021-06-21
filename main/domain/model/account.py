@@ -2,7 +2,6 @@ from datetime import datetime
 from enum import Enum
 
 from main.domain.common.entities import DomainModel, ValueObject
-from .transaction import Transaction
 from typing import List
 
 
@@ -20,6 +19,22 @@ class Snapshot(ValueObject):
         super().__init__()
 
         self.date = date
+        self.amount = amount
+
+
+class Transaction(ValueObject):
+
+    def __init__(self, date_created: datetime, amount: float) -> None:
+        """
+        A real transaction made by the user into (or out of) an asset account.
+
+        :param date_created: The date the transaction was made.
+        :param amount: The amount of the transaction (positive or negative to 2 DP).
+        """
+
+        super().__init__()
+
+        self.date_created = date_created
         self.amount = amount
 
 

@@ -1,6 +1,6 @@
 from typing import Any
 
-from main.domain.common.entities import DomainModel
+from main.domain.common.entities import DomainModel, ValueObject
 
 
 class DomainModelMapper:
@@ -12,7 +12,6 @@ class DomainModelMapper:
         :param domain_model: The model to convert.
         :return: The other model.
         """
-        pass
 
     def to_domain_model(self, model: Any) -> DomainModel:
         """
@@ -21,4 +20,22 @@ class DomainModelMapper:
         :param model: the other model to convert into a Domain Model.
         :return: The domain model.
         """
-        pass
+
+
+class ValueObjectMapper:
+
+    def from_object(self, value_object: ValueObject) -> dict:
+        """
+        Converts a value object to any other model.
+
+        :param value_object: The value object to convert.
+        :return: The other model
+        """
+
+    def to_object(self, model: Any) -> ValueObject:
+        """
+        Converts an entity, DTO or other data model into a Value Object.
+
+        :param model: The other model to convert into a value object.
+        :return: The value object
+        """

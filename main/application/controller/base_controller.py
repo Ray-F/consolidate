@@ -1,20 +1,22 @@
+import datetime
 import os
 
-from flask import jsonify
+from flask import jsonify, Response
 from flask_graphql import GraphQLView
 from graphene import Schema
 
-from main.application.controller.dto_mapper import TransactionDtoMapper
+from main.application.controller.dto_mapper import AccountDtoMapper
 from main.application.controller.graph_controller import RootQuery
+from main.domain.model.account import Account, AccountType, Transaction, Snapshot
 from main.infrastructure.mongo_service import MongoService
-from main.infrastructure.repository.transaction_repository import TransactionRepository
+from main.infrastructure.repository.account_repository import AccountRepository
 
 
 class BaseController:
 
     def __init__(self):
-        self.__transaction_mapper = TransactionDtoMapper()
-        self.__transaction_repo = TransactionRepository(MongoService(os.environ.get("MONGO_URI"), 'consolidate-dev'))
+        self.__account_mapper = AccountDtoMapper()
+        self.__account_repo = AccountRepository(MongoService(os.environ.get("MONGO_URI"), 'consolidate-dev'))
 
         self.graph = GraphQLView.as_view('graphql',
                                          schema=Schema(query=RootQuery),
@@ -22,7 +24,5 @@ class BaseController:
         "A graph representation of the API."
 
     def display_accounts(self):
-        transactions = self.__transaction_repo.get_all_transactions()
-
-        return jsonify([self.__transaction_mapper.from_domain_model(transaction) for transaction in transactions])
-
+        accounts = self.__account_repo.list()
+        return jsonify([self.__account_mapper.from_domain_model(account) for account in accounts])
