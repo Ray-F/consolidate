@@ -1,4 +1,4 @@
-import os
+from os import environ as env
 
 from flask import jsonify
 from flask_graphql import GraphQLView
@@ -9,16 +9,18 @@ from main.application.controller.graph_controller import RootQuery
 from main.infrastructure.mongo_service import MongoService
 from main.infrastructure.repository.account_repository import AccountRepository
 from main.infrastructure.repository.user_repository import UserRepository
+from main.util.logging import log_init
 
 
 class BaseController:
 
     def __init__(self):
+        log_init("Base controller")
         self.__account_mapper = AccountDtoMapper()
         self.__snapshot_mapper = SnapshotDtoMapper()
         self.__user_mapper = UserDtoMapper()
 
-        mongo_service = MongoService(os.environ.get("MONGO_URI"), 'consolidate-dev')
+        mongo_service = MongoService(env.get("MONGO_URI"), 'consolidate-dev')
         self.__account_repo = AccountRepository(mongo_service=mongo_service)
         self.__user_repo = UserRepository(mongo_service=mongo_service, account_repository=self.__account_repo)
 

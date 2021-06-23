@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
+from main.util.logging import log_init
+
 
 class MongoService:
     """
@@ -17,7 +19,7 @@ class MongoService:
         self.__client = MongoClient(uri, ssl=True, tlsAllowInvalidCertificates=True)
         self.__database = self.__client[db_name]
 
-        print("[Server] Mongo service initiated")
+        log_init("mongo service")
 
     def collection(self, collection_name: str) -> Collection:
         return self.__database[collection_name]
