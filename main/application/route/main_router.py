@@ -19,5 +19,5 @@ bp.add_url_rule(rule='/graph', view_func=base_control.graph)
 
 auth_control = AuthController()
 
-bp.add_url_rule(rule='/auth_callback', view_func=auth_control.callback_handler)
+bp.add_url_rule(rule='/auth_callback', view_func=auth_control.authorise)
 bp.add_url_rule(rule='/login', view_func=auth_control.login)
