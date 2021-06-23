@@ -11,4 +11,7 @@ def create_app():
     app.json_encoder = DtoJsonEncoder
     app.register_blueprint(bp)
 
+    # Set some random secret key for the purposes of session tracking
+    app.secret_key = "MY_AWESOME_APPLICATION"
+
     return app
