@@ -82,22 +82,13 @@ class AccountDtoMapper(DomainModelMapper):
                        snapshots=[self.snapshot_mapper.to_object(dto) for dto in model.snapshots])
 
 
-class UserDto(Dto):
+class UserDtoMapper(DomainModelMapper):
     account_mapper = AccountDtoMapper()
     snapshot_mapper = SnapshotDtoMapper()
 
-    def __init__(self, id: str, name: str, email: str, accounts: List[AccountDto], goals: List[SnapshotDto]):
-        self.id = id
-        self.name = name
-        self.email = email
-        self.accounts = accounts
-        self.goals = goals
-
-    # FIXME: Temporary method for displaying a DTO on screen.
-    @classmethod
-    def to_dto(cls, user: User):
+    def from_domain_model(self, user: User) -> UserDto:
         return UserDto(id=user.id,
                        name=user.name,
                        email=user.email,
-                       accounts=[cls.account_mapper.from_domain_model(acc) for acc in user.accounts],
-                       goals=[cls.snapshot_mapper.from_object(goal) for goal in user.goals])
+                       accounts=[self.account_mapper.from_domain_model(acc) for acc in user.accounts],
+                       goals=[self.snapshot_mapper.from_object(goal) for goal in user.goals])

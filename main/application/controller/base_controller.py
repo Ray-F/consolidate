@@ -4,7 +4,7 @@ from flask import jsonify
 from flask_graphql import GraphQLView
 from graphene import Schema
 
-from main.application.controller.dto_mapper import AccountDtoMapper, SnapshotDtoMapper, UserDto
+from main.application.controller.dto_mapper import AccountDtoMapper, SnapshotDtoMapper, UserDtoMapper
 from main.application.controller.graph_controller import RootQuery
 from main.infrastructure.mongo_service import MongoService
 from main.infrastructure.repository.account_repository import AccountRepository
@@ -16,6 +16,7 @@ class BaseController:
     def __init__(self):
         self.__account_mapper = AccountDtoMapper()
         self.__snapshot_mapper = SnapshotDtoMapper()
+        self.__user_mapper = UserDtoMapper()
 
         mongo_service = MongoService(os.environ.get("MONGO_URI"), 'consolidate-dev')
         self.__account_repo = AccountRepository(mongo_service=mongo_service)
@@ -32,4 +33,4 @@ class BaseController:
 
     def display_users(self):
         users = self.__user_repo.list()
-        return jsonify([UserDto.to_dto(user) for user in users])
+        return jsonify([self.__user_mapper.from_domain_model(user) for user in users])
