@@ -1,5 +1,10 @@
 # Consolidate
+
+![logo](https://raw.githubusercontent.com/Ray-F/consolidate/master/docs/assets/consolidate_logo_64.png)
+
 PWA for consolidating and reporting on personal finances across different asset categories.
+
+
 
 ## Software Architecture
 
