@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import List
 
 from main.domain.common.domain_mapper import DomainModelMapper, ValueObjectMapper
@@ -13,33 +14,34 @@ from main.util.localdatetime import parse_isostring_with_tz
 #  Further, we should have some application services that call methods to retrieve the larger domain models if we need
 #  more attributes, so we should consider just passing the ones needed for certain endpoint functionalities.
 
+@dataclass(frozen=True)
 class TransactionDto(Dto):
-
-    def __init__(self, date_created: str, amount: float):
-        self.date_created: str = date_created
-        self.amount: float = amount
+    date_created: str
+    amount: float
 
 
+@dataclass(frozen=True)
 class SnapshotDto(Dto):
-
-    def __init__(self, timestamp: str, amount: float):
-        self.timestamp = timestamp
-        self.amount = amount
+    timestamp: str
+    amount: float
 
 
+@dataclass(frozen=True)
 class AccountDto(Dto):
+    id: str
+    name: str
+    account_type: str
+    transactions: List[TransactionDto]
+    snapshots: List[SnapshotDto]
 
-    def __init__(self,
-                 id: str,
-                 name: str,
-                 account_type: str,
-                 transactions: List[TransactionDto],
-                 snapshots: List[SnapshotDto]):
-        self.id = id
-        self.name = name
-        self.account_type = account_type
-        self.transactions = transactions
-        self.snapshots = snapshots
+
+@dataclass(frozen=True)
+class UserDto(Dto):
+    id: str
+    name: str
+    email: str
+    accounts: List[AccountDto]
+    goals: List[SnapshotDto]
 
 
 class SnapshotDtoMapper(ValueObjectMapper):

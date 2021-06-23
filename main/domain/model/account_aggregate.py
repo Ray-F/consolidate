@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import List
@@ -21,18 +22,16 @@ class AccountType(Enum):
     CASH = "CASH"
 
 
+@dataclass(frozen=True)
 class Transaction(ValueObject):
+    """
+    A real transaction made by the user into (or out of) an asset account.
 
-    def __init__(self, date_created: datetime, amount: float) -> None:
-        """
-        A real transaction made by the user into (or out of) an asset account.
-
-        :param date_created: The date the transaction was made.
-        :param amount: The amount of the transaction (positive or negative to 2 DP).
-        """
-
-        self.date_created: datetime = date_created
-        self.amount: float = amount
+    :param date_created: The date the transaction was made.
+    :param amount: The amount of the transaction (positive or negative to 2 DP).
+    """
+    date_created: datetime
+    amount: float
 
 
 class Account(DomainModel):

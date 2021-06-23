@@ -1,17 +1,15 @@
 from datetime import datetime
-
+from dataclasses import dataclass
 from main.domain.common.entities import ValueObject
 
 
+@dataclass(frozen=True)
 class Snapshot(ValueObject):
+    """
+    A snapshot in time of any asset (account or collection of accounts).
 
-    def __init__(self, timestamp: datetime, amount: float) -> None:
-        """
-        A snapshot in time of any asset (account or collection of accounts).
-        
-        :param timestamp: The datetime this snapshot is intended to be for.
-        :param amount: The cumulative value of the asset at this point in time.
-        """
-
-        self.timestamp: datetime = timestamp
-        self.amount: float = amount
+    :param timestamp (datetime): The datetime this snapshot is intended to be for.
+    :param amount (float): The cumulative value of the asset at this point in time.
+    """
+    timestamp: datetime
+    amount: float
