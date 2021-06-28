@@ -77,11 +77,11 @@ class Account(DomainModel):
         """
 
         # Sort the list of snapshots and take the most recent one
-        latest_snapshot = sorted(self.snapshots, key=lambda snapshot: snapshot.timestamp, reverse=True)[0]
+        latest_snapshot = 0 if len(self.snapshots) == 0 else sorted(self.snapshots, key=lambda snapshot: snapshot.timestamp, reverse=True)[0]
 
         # Get the sum of all transaction amounts between the latest snapshot and now
         def within_snap_and_now(trans: Transaction):
-            return latest_snapshot.timestamp < trans.date_created < datetime.now(tz=LOCAL_TIMEZONE)
+            return latest_snapshot.timestamp.astimezone(tz=LOCAL_TIMEZONE) < trans.date_created.astimezone(tz=LOCAL_TIMEZONE) < datetime.now(tz=LOCAL_TIMEZONE)
 
         transactions_sum = sum([transaction.amount for transaction in filter(within_snap_and_now, self.transactions)])
 
@@ -98,3 +98,20 @@ class Account(DomainModel):
         :return: The total volume of transactions made by the owner.
         """
         return sum([abs(trans.amount) for trans in self.transactions])
+    
+    def get_latest_update_time(self) -> datetime:
+        """
+        :return: The last timestamp recorded for either a transaction or snapshot.
+        """
+        # If there are no transactions or snapshots, there is no latest timestamp
+        if len(self.snapshots) == 0 and len(self.transactions) == 0:
+            return None
+        
+        if len(self.transactions) == 0:
+            return self.snapshots[-1].timestamp
+        
+        if len(self.snapshots) == 0:
+            return self.transactions[-1].date_created
+        
+        if len(self.snapshots) != 0 and len(self.transactions) != 0:
+            return max(self.snapshots[-1].timestamp, self.transactions[-1].date_created)

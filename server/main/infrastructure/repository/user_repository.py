@@ -3,6 +3,8 @@ from typing import List
 
 from bson import ObjectId
 
+import json
+
 from main.domain.common.repository import Repository
 from main.domain.model.user import User
 from main.infrastructure.mongo_service import MongoService
@@ -37,9 +39,24 @@ class UserRepository(Repository):
         Gets a user by their `id` and returns the user. If no user with `id` is found, then return `None`.
         """
 
-        dbo = self.__user_collection.find_one({"_id": id})
+        pipeline = [
+            {
+                "$match": {
+                    "_id": ObjectId(id)
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "accounts",
+                    "localField": "account_ids",
+                    "foreignField": "_id",
+                    "as": "accounts"
+                }
+            }
+        ]
 
-        return self.__user_mapper.to_domain_model(dbo) if dbo else None
+        dbo = next(self.__user_collection.aggregate(pipeline))
+        return self.__user_mapper.to_domain_model(dbo)
 
     def save(self, user: User) -> User:
         dbo = self.__user_mapper.from_domain_model(user)

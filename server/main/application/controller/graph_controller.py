@@ -1,9 +1,9 @@
 from os import environ as env
 
-from graphene import ObjectType, String, NonNull, Schema, List, Enum, DateTime, Float, ID, Field
+from graphene import ObjectType, String, NonNull, Schema, List, Enum, DateTime, Float, ID, Field, DateTime, Float
 
 from main.application.controller.auth_controller import requires_auth
-from main.domain.model.account_aggregate import AccountType
+from main.domain.model.account_aggregate import Account, AccountType
 from main.infrastructure.mongo_service import MongoService
 from main.infrastructure.repository.account_repository import AccountRepository
 from main.infrastructure.repository.user_repository import UserRepository
@@ -35,8 +35,22 @@ class AccountNode(ObjectType):
     account_type = NonNull(Enum.from_enum(AccountType))
     transactions = List(TransactionNode)
     snapshots = List(SnapshotNode)
-
+    net_contribution = NonNull(Float)
+    expected_balance = NonNull(Float)
+    latest_timestamp = DateTime()
     users = List(lambda: UserNode)
+
+    @staticmethod
+    def resolve_net_contribution(parent: Account, info):
+        return parent.get_net_contribution()
+
+    @staticmethod
+    def resolve_expected_balance(parent: Account, info):
+        return parent.get_expected_balance()
+
+    @staticmethod
+    def resolve_latest_timestamp(parent: Account, info):
+        return parent.get_latest_update_time()
 
     @staticmethod
     def resolve_users(parent, info):
@@ -63,8 +77,6 @@ class UserNode(ObjectType):
 
 class RootQuery(ObjectType):
     """The root of our query."""
-
-    errors = Field(ErrorType)
 
     accounts = List(AccountNode, description="Requires authorisation")
     get_account_by_id = Field(AccountNode, id=String(), description="Requires authorisation")
