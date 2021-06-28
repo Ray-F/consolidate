@@ -15,7 +15,7 @@ class UserRepositoryTest(unittest.TestCase):
     def setUp(self):
         self.__mongo_service = MongoService(os.environ.get("MONGO_URI"), "consolidate-dev")
         self.__account_repo = AccountRepository(mongo_service=self.__mongo_service)
-        self.__user_repo = UserRepository(mongo_service=self.__mongo_service, account_repository=self.__account_repo)
+        self.__user_repo = UserRepository(mongo_service=self.__mongo_service, account_repo=self.__account_repo)
 
     @unittest.skip
     def test_action_addAnAccount(self):

@@ -10,10 +10,7 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 
 base_control = BaseController()
 
-bp.add_url_rule(rule='/accounts', view_func=base_control.display_accounts)
-bp.add_url_rule(rule='/users', view_func=base_control.display_users)
-
-bp.add_url_rule(rule='/graph', view_func=base_control.graph)
+bp.add_url_rule(rule='/graphql', view_func=base_control.graph)
 
 # Authentication related routing
 
