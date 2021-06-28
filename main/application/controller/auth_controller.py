@@ -26,7 +26,7 @@ def requires_auth(f):
 class AuthController:
 
     def __init__(self):
-        log_init("base controller")
+        log_init("auth controller")
         oauth = OAuth(flask.current_app)
 
         base_url = env.get("AUTH0_DOMAIN")
