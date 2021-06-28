@@ -10,12 +10,15 @@ from main.util.logging import log_init
 
 # TODO: Add authorisation scopes to `requires_auth` and `authorise` (if needed)
 
+class AuthError(PermissionError):
+    """Thrown when the client is not authorised to perform an action."""
+
+
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
-            # Redirect to Login page here
-            return redirect('/api/login')
+            raise AuthError("Insufficient permission to use this query.")
 
         # FIXME: Determine what perms user has and what level of auth `f` requires, by adding scope param
         return f(*args, **kwargs)
@@ -61,7 +64,7 @@ class AuthController:
             'picture': userinfo['picture']
         }
 
-        return redirect('/')
+        return redirect('/api/graphql')
 
     def login(self):
         # FIXME: Change this before production

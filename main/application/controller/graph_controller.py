@@ -1,6 +1,6 @@
-from graphene import ObjectType, String, NonNull, Schema, List, Enum, DateTime, Float, ID, Field
-
 from os import environ as env
+
+from graphene import ObjectType, String, NonNull, Schema, List, Enum, DateTime, Float, ID, Field
 
 from main.domain.model.account_aggregate import AccountType
 from main.infrastructure.mongo_service import MongoService
