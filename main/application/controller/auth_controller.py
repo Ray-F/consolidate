@@ -8,8 +8,6 @@ from werkzeug.utils import redirect
 
 from main.util.logging import log_init
 
-# TODO: Add authorisation scopes to `requires_auth` and `authorise` (if needed)
-
 class AuthError(PermissionError):
     """Thrown when the client is not authorised to perform an action."""
 
@@ -17,8 +15,9 @@ class AuthError(PermissionError):
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if 'profile' not in session:
-            raise AuthError("Insufficient permission to use this query.")
+        # TODO: Re-enable authorisation once out of development
+        # if 'profile' not in session:
+        #     raise AuthError("Insufficient permission to use this query.")
 
         # FIXME: Determine what perms user has and what level of auth `f` requires, by adding scope param
         return f(*args, **kwargs)
