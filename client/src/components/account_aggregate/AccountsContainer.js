@@ -1,32 +1,46 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
 import AccountCard from './AccountCard';
 import { gql, useQuery } from '@apollo/client';
+import { AccountTypeLogoUrls } from '../../model/AccountAggregate';
 
 
-const ACCOUNTS = gql`
-query {
-  accounts {
-    id
-    name
-    expectedBalance
-    netContribution
-    latestTimestamp
-  }
-}
-`
+const AccountsContainer = ({ userId }) => {
 
-const AccountsContainer = () => {
-  const { loading, error, data } = useQuery(ACCOUNTS)
+  const ACCOUNTS = gql`
+    query {
+      getUserById(id: "${userId}") {
+        accounts {
+          id
+          name
+          expectedBalance
+          netContribution
+          latestTimestamp
+          accountType
+        }
+      }
+    }
+  `;
+
+  const { loading, error, data } = useQuery(ACCOUNTS);
 
   return (
-    <div>
+    <Grid container spacing={3}>
       {loading ? (<CircularProgress />) : error ? console.log(error) : (
-        data.accounts.map((account, index) => (
-          <AccountCard key={index} name={account.name} amount={account.expectedBalance} latestTimestamp={account.latestTimestamp} />
+        data?.getUserById.accounts.map((account, index) => (
+          <Grid item xs={12} lg={6}>
+            <AccountCard key={index}
+                         name={account.name}
+                         amount={account.expectedBalance}
+                         latestTimestamp={account.latestTimestamp}
+              // FIXME: Replace this with URL from server
+                         logoUrl={AccountTypeLogoUrls[account.accountType]}
+                         target={{ timestamp: new Date(2021, 9, 20), amount: 6000 }}
+            />
+          </Grid>
         ))
       )}
-    </div>
+    </Grid>
   );
 };
 

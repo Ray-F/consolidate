@@ -4,6 +4,10 @@ import { Menu } from '@material-ui/icons';
 import styled from 'styled-components';
 
 
+const SAppBar = styled(AppBar)`
+  background-color: #24AEB6;
+`
+
 const SButton = styled(Button)`
   color: white;
   position: absolute;
@@ -13,7 +17,7 @@ const SButton = styled(Button)`
 const Navigation = () => {
   return (
     <div>
-      <AppBar position={'fixed'}>
+      <SAppBar position={'fixed'}>
         <Toolbar>
           <IconButton edge={'start'} color={'inherit'}>
             <Menu />
@@ -22,11 +26,11 @@ const Navigation = () => {
             Consolidate
           </Typography>
 
-          <SButton>
+          <SButton onClick={() => window.location = "/api/login"}>
             Login
           </SButton>
         </Toolbar>
-      </AppBar>
+      </SAppBar>
     </div>
   );
 };
