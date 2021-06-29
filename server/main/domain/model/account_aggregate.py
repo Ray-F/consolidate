@@ -18,6 +18,7 @@ class AccountType(Enum):
     BNZ = "BNZ"
     SHARESIES = "SHARESIES"
     SIMPLICITY = "SIMPLICITY"
+    KIWISAVER = "KIWISAVER"
 
     CASH = "CASH"
 

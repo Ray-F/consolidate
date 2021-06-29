@@ -63,6 +63,27 @@ class UserRepositoryTest(unittest.TestCase):
 
         self.__user_repo.save(new_user)
 
+    def test_changeAccountTransactions(self):
+        # BNZ
+        # account1 = self.__account_repo.get_account_by_id("60cf3c92efed09873d5dea0c")
+        # account1.name = "BNZ Savings"
+
+        # SIMPLICITY
+        # account2 = self.__account_repo.get_account_by_id("60cf3c704036bd990e90430c")
+        # account2.name = "Simplicity Growth Fund"
+
+        # KIWISAVER
+        account3 = self.__account_repo.get_account_by_id("60cf460a32c20609b6ef3223")
+        account3.transactions.insert(
+            0,
+            Transaction(date_created=datetime.fromisoformat("2021-04-29T06:32:43"), amount=130.40)
+        )
+        account3.transactions.append(
+            Transaction(date_created=datetime.now(), amount=-5000)
+        )
+
+        self.__account_repo.save(account3)
+
     @unittest.skip("enable when clearing DB")
     def test_deleteAllUsers(self):
         self.__mongo_service.collection("users").delete_many({})
