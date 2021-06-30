@@ -68,7 +68,7 @@ class UserEntityMapper(DomainModelMapper):
             '_id': ObjectId() if (domain_model.id == "" or domain_model.id is None) else ObjectId(domain_model.id),
             'name': domain_model.name,
             'email': domain_model.email,
-            'account_ids': [ObjectId(account.id) for account in domain_model.accounts],
+            'account_ids': [self.__account_mapper.from_domain_model(account)['_id'] for account in domain_model.accounts],
             'profile_picture': domain_model.profile_picture,
             'goals': [self.__snapshot_mapper.from_object(goal) for goal in domain_model.goals],
         }
