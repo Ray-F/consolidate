@@ -44,6 +44,7 @@ class Account(DomainModel):
     def __init__(self,
                  id: str,
                  name: str,
+                 creation_time: Optional[datetime],
                  account_type: AccountType,
                  transactions: List[Transaction],
                  snapshots: List[Snapshot]) -> None:
@@ -56,12 +57,12 @@ class Account(DomainModel):
         :param transactions: List of all transactions made for this account.
         :param snapshots: List of all account snapshots in the past.
         """
-
         self.id: str = id
         self.name: str = name
         self.account_type: AccountType = account_type
         self.transactions: List[Transaction] = transactions
         self.snapshots: List[Snapshot] = snapshots
+        self.creation_time: datetime = creation_time or datetime.now(tz=LOCAL_TIMEZONE)
 
     def add_transaction(self, transaction: Transaction):
         self.transactions.append(transaction)

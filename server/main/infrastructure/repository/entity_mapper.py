@@ -40,6 +40,7 @@ class AccountEntityMapper(DomainModelMapper):
         return {
             '_id': ObjectId() if (domain_model.id == "" or domain_model.id is None) else ObjectId(domain_model.id),
             'name': domain_model.name,
+            'creation_time': domain_model.creation_time,
             'account_type': domain_model.account_type.name,
             'transactions': [self.transaction_mapper.from_object(transaction)
                              for transaction in domain_model.transactions],
@@ -49,6 +50,7 @@ class AccountEntityMapper(DomainModelMapper):
     def to_domain_model(self, dbo: dict) -> Account:
         return Account(id=str(dbo['_id']),
                        name=dbo['name'],
+                       creation_time=dbo.get('creation_time'),
                        account_type=AccountType[dbo['account_type']],
                        transactions=[self.transaction_mapper.to_object(transaction_dbo)
                                      for transaction_dbo in dbo['transactions']],
