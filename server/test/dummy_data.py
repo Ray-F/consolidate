@@ -84,6 +84,18 @@ class UserRepositoryTest(unittest.TestCase):
 
         self.__account_repo.save(account3)
 
+    def test_addAccount(self):
+        account = Account(id="",
+                          name="Sharesies Tech",
+                          account_type=AccountType.SHARESIES,
+                          transactions=[],
+                          snapshots=[])
+
+        user = self.__user_repo.get_user_by_id("60d04c24edd16a7f2e814202")
+        user.accounts.append(account)
+
+        self.__user_repo.save(user)
+
     @unittest.skip("enable when clearing DB")
     def test_deleteAllUsers(self):
         self.__mongo_service.collection("users").delete_many({})
