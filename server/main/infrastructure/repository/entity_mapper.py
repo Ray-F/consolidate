@@ -40,7 +40,7 @@ class AccountEntityMapper(DomainModelMapper):
         return {
             '_id': ObjectId() if (domain_model.id == "" or domain_model.id is None) else ObjectId(domain_model.id),
             'name': domain_model.name,
-            'account_type': domain_model.account_type.value,
+            'account_type': domain_model.account_type.name,
             'transactions': [self.transaction_mapper.from_object(transaction)
                              for transaction in domain_model.transactions],
             'snapshots': [self.snapshot_mapper.from_object(snapshot) for snapshot in domain_model.snapshots]

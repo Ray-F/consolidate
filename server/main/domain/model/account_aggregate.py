@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
-from typing import List
+from enum import Enum, auto
+from typing import List, Optional
 
 from main.domain.common.entities import DomainModel, ValueObject
 from main.domain.common.errors import DomainError
-from main.domain.model.snapshot import Snapshot
+from main.domain.model.snapshot import Snapshot, sort_snapshots
 from main.util.localdatetime import LOCAL_TIMEZONE
 
 
@@ -14,13 +14,17 @@ class AccountType(Enum):
     The type of account (either platform or asset type, i.e. Money) the account is.
     """
 
-    ASB = "ASB"
-    BNZ = "BNZ"
-    SHARESIES = "SHARESIES"
-    SIMPLICITY = "SIMPLICITY"
-    KIWISAVER = "KIWISAVER"
+    ASB = auto(),
+    BNZ = auto(),
+    ANZ = auto(),
 
-    CASH = "CASH"
+    SIMPLICITY = auto(),
+    KIWISAVER = auto(),
+
+    SHARESIES = auto(),
+    HATCH = auto(),
+
+    CASH = auto()
 
 
 @dataclass(frozen=True)
