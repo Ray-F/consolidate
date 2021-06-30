@@ -39,6 +39,16 @@ class Transaction(ValueObject):
     amount: float
 
 
+def sort_transactions(transactions_list: List[Transaction]) -> List[Transaction]:
+    """
+    Sorts a list of transactions in order of the most recent (index 0) to oldest (index -1).
+
+    :param transactions_list: The list of transactions to sort.
+    :return: A sorted list of transactions.
+    """
+    return sorted(transactions_list, key=lambda x: x.date_created, reverse=True)
+
+
 class Account(DomainModel):
 
     def __init__(self,
