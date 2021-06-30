@@ -89,19 +89,52 @@ class Account(DomainModel):
         Returns the most accurate value for an account's existing asset value, based on the latest snapshot and then
         adding transactions that have happened since the snapshot was taken.
 
-        :return: the expected balance amount
+        :return: the expected balance amount.
         """
 
         # Sort the list of snapshots and take the most recent one
-        latest_snapshot = 0 if len(self.snapshots) == 0 else sorted(self.snapshots, key=lambda snapshot: snapshot.timestamp, reverse=True)[0]
+        latest_snapshot = self.get_most_recent_snapshot()
 
-        # Get the sum of all transaction amounts between the latest snapshot and now
+        latest_snapshot_amount = latest_snapshot.amount if latest_snapshot else 0
+        latest_snapshot_timestamp = latest_snapshot.timestamp if latest_snapshot else self.creation_time
+
+        # Get the sum of all transaction amounts between the latest snapshot (if it exists) and now
         def within_snap_and_now(trans: Transaction):
-            return latest_snapshot.timestamp.astimezone(tz=LOCAL_TIMEZONE) < trans.date_created.astimezone(tz=LOCAL_TIMEZONE) < datetime.now(tz=LOCAL_TIMEZONE)
+            return latest_snapshot_timestamp.astimezone(tz=LOCAL_TIMEZONE) \
+                   < trans.date_created.astimezone(tz=LOCAL_TIMEZONE) \
+                   < datetime.now(tz=LOCAL_TIMEZONE)
 
-        transactions_sum = sum([transaction.amount for transaction in filter(within_snap_and_now, self.transactions)])
+        transactions_sum = sum([t.amount for t in filter(within_snap_and_now, self.transactions)])
 
-        return latest_snapshot.amount + transactions_sum
+        return latest_snapshot_amount + transactions_sum
+
+    def get_recent_snapshots(self, limit: int) -> List[Snapshot]:
+        """
+        Returns a list of the most recent snapshots up to the `limit`, with index 0 being the most recent.
+        """
+        n_to_return = len(self.snapshots) if limit > len(self.snapshots) else limit
+        return sort_snapshots(self.snapshots)[:n_to_return]
+
+    def get_recent_transactions(self, limit: int) -> List[Transaction]:
+        """
+        Returns a list of the most recent transactions up to the `limit`, with index 0 being the most recent.
+        """
+        n_to_return = len(self.transactions) if limit > len(self.transactions) else limit
+        return sort_transactions(self.transactions)[:n_to_return]
+
+    def get_most_recent_snapshot(self) -> Optional[Snapshot]:
+        """
+        :return: The most recent snapshot.
+        """
+        most_recent = self.get_recent_snapshots(1)
+        return most_recent[0] if most_recent else None
+
+    def get_most_recent_transaction(self) -> Optional[Transaction]:
+        """
+        :return: The most recent transaction.
+        """
+        most_recent = self.get_recent_transactions(1)
+        return most_recent[0] if most_recent else None
 
     def get_net_contribution(self) -> float:
         """
@@ -114,20 +147,21 @@ class Account(DomainModel):
         :return: The total volume of transactions made by the owner.
         """
         return sum([abs(trans.amount) for trans in self.transactions])
-    
-    def get_latest_update_time(self) -> datetime:
+
+    def get_latest_update_time(self) -> Optional[datetime]:
         """
         :return: The last timestamp recorded for either a transaction or snapshot.
         """
-        # If there are no transactions or snapshots, there is no latest timestamp
-        if len(self.snapshots) == 0 and len(self.transactions) == 0:
-            return None
-        
-        if len(self.transactions) == 0:
-            return self.snapshots[-1].timestamp
-        
-        if len(self.snapshots) == 0:
-            return self.transactions[-1].date_created
-        
-        if len(self.snapshots) != 0 and len(self.transactions) != 0:
-            return max(self.snapshots[-1].timestamp, self.transactions[-1].date_created)
+        most_recent_transaction = self.get_most_recent_transaction()
+        most_recent_snapshot = self.get_most_recent_snapshot()
+
+        if most_recent_snapshot and most_recent_transaction:
+            return max(most_recent_snapshot.timestamp, most_recent_transaction.date_created)
+
+        elif most_recent_transaction:
+            return most_recent_transaction.date_created
+
+        elif most_recent_snapshot:
+            return most_recent_snapshot.timestamp
+
+        return self.creation_time
