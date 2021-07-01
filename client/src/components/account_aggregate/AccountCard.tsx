@@ -21,7 +21,7 @@ const CentsSpan = styled.span`
 const AmountContainer = styled(Grid)`
   padding-top: 20px;
   padding-bottom: 20px;
-`
+`;
 
 const TimestampSpan = styled.span`
   font-size: 0.4em;
@@ -33,9 +33,20 @@ const GoalHint = styled(Typography)`
   font-size: 0.75em;
 `;
 
-const AccountCard = ({ name, amount, latestTimestamp, logoUrl, target }) => {
+interface Target {
+  amount: number
+  timestamp: Date
+}
 
-  const accountBalAsParts = toSeparatedThousands(amount, ' ', true).split('.')
+const AccountCard = ({
+                       name,
+                       amount,
+                       latestTimestamp,
+                       logoUrl,
+                       target,
+                     }: { name: string, amount: number, latestTimestamp: Date, logoUrl: string, target: Target }) => {
+
+  const accountBalAsParts = toSeparatedThousands(amount, ' ', true).split('.');
 
   return (
     <SPaper>
@@ -58,7 +69,7 @@ const AccountCard = ({ name, amount, latestTimestamp, logoUrl, target }) => {
           <Typography variant={'body2'}>TARGET</Typography>
         </Grid>
         <Grid item xs={9}>
-          <Typography>{toSeparatedThousands(Math.round(target.amount - amount), ' ')} in {Math.round((target.timestamp - new Date()) / MILLIS_IN_MONTH)} months</Typography>
+          <Typography>{toSeparatedThousands(Math.round(target.amount - amount), ' ')} in {Math.round((target.timestamp.valueOf() - new Date().valueOf()) / MILLIS_IN_MONTH)} months</Typography>
           <GoalHint>{toSeparatedThousands(Math.floor(target.amount), ' ')} by {toPrettyMonthYear(target.timestamp)}</GoalHint>
         </Grid>
       </Grid>

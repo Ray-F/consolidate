@@ -2,7 +2,6 @@ import React from 'react';
 import { CircularProgress, Grid } from '@material-ui/core';
 import AccountCard from './AccountCard';
 import { gql, useQuery } from '@apollo/client';
-import { AccountTypeLogoUrls } from '../../model/AccountAggregate';
 
 
 const AccountsContainer = ({ userId }) => {
@@ -17,6 +16,7 @@ const AccountsContainer = ({ userId }) => {
           netContribution
           latestTimestamp
           accountType
+          logoUrl
         }
       }
     }
@@ -34,7 +34,7 @@ const AccountsContainer = ({ userId }) => {
                          amount={account.expectedBalance}
                          latestTimestamp={account.latestTimestamp}
               // FIXME: Replace this with URL from server
-                         logoUrl={AccountTypeLogoUrls[account.accountType]}
+                         logoUrl={account.logoUrl}
                          target={{ timestamp: new Date(2021, 9, 20), amount: 6000 }}
             />
           </Grid>

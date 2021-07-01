@@ -52,11 +52,13 @@ const BalancePie = ({ title, slices }: { title: string, slices: Slice[] }) => {
   for (let i = 0; i < 4; i++) {
     different.push(`rgb(${base[0] - i * 20}, ${base[1] - i * 30}, ${base[2] - i * 30})`)
   }
+
   const total = slices.map((slice) => slice.amount).reduce((a, b) => a + b, 0);
   const data = slices.map((slice, index) => {
+    const slicePct = Math.round(slice.amount / total * 100)
     return {
       angle: slice.amount / total * 360,
-      label: Math.round(slice.amount / total * 100) + '%',
+      label: slicePct ? slicePct + "%" : "",
       color: different[index],
       name: `${slice.name} (${toSeparatedThousands(slice.amount, ' ')})`
     };
@@ -74,8 +76,7 @@ const BalancePie = ({ title, slices }: { title: string, slices: Slice[] }) => {
         colorType={'literal'}
       />
       <SLegend
-        items={data.map((item, index) => ({ title: item.name, color: different[index] }))}
-
+        items={data.filter((item) => !!item.label).map((item, index) => ({ title: item.name, color: different[index] }))}
       />
     </SBox>
   );
