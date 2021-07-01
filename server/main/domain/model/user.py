@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from main.domain.common.entities import DomainModel
@@ -33,10 +34,16 @@ class User(DomainModel):
         self.accounts: List[Account] = accounts
         self.goals: List[Snapshot] = goals
 
-    def get_net_assets(self) -> float:
+    def get_expected_balance(self) -> float:
         """
-        Returns the most accurate value for user's existing asset value.
-
-        :return: The expected worth
+        :return: The most accurate value for user's existing asset value.
         """
         return sum([account.get_expected_balance() for account in self.accounts])
+
+    def get_last_update_time(self) -> datetime:
+        """
+        :return: The last update time of the user.
+        """
+        # FIXME: Implement this
+        accounts = self.accounts
+        return datetime.now()

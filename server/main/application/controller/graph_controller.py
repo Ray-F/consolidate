@@ -4,6 +4,7 @@ from graphene import ObjectType, String, NonNull, Schema, List, Enum, DateTime, 
 
 from main.application.controller.auth_controller import requires_auth
 from main.domain.model.account_aggregate import Account, AccountType
+from main.domain.model.user import User
 from main.infrastructure.mongo_service import MongoService
 from main.infrastructure.repository.account_repository import AccountRepository
 from main.infrastructure.repository.user_repository import UserRepository
@@ -32,13 +33,19 @@ class AccountNode(ObjectType):
 
     id = NonNull(ID)
     name = NonNull(String)
-    account_type = NonNull(Enum.from_enum(AccountType))
+    account_type = NonNull(String)
+    logo_url = NonNull(String)
     transactions = List(TransactionNode)
     snapshots = List(SnapshotNode)
     net_contribution = NonNull(Float)
     expected_balance = NonNull(Float)
     latest_timestamp = DateTime()
     users = List(lambda: UserNode)
+    creation_time = DateTime()
+
+    @staticmethod
+    def resolve_logo_url(parent: Account, info):
+        return parent.account_type.logo_url
 
     @staticmethod
     def resolve_net_contribution(parent: Account, info):
@@ -69,10 +76,20 @@ class UserNode(ObjectType):
     profile_picture_url = String()
     accounts = List(AccountNode)
     goals = List(SnapshotNode)
+    expected_balance = NonNull(Float)
+    last_update_time = NonNull(DateTime)
 
     @staticmethod
-    def resolve_profile_picture_url(parent, info):
+    def resolve_profile_picture_url(parent: User, info):
         return parent.profile_picture
+
+    @staticmethod
+    def resolve_expected_balance(parent: User, info):
+        return parent.get_expected_balance()
+
+    @staticmethod
+    def resolve_last_update_time(parent: User, info):
+        return parent.get_last_update_time()
 
 
 class RootQuery(ObjectType):

@@ -1,30 +1,46 @@
+from collections import namedtuple
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum, auto
-from typing import List, Optional
+from enum import Enum
+from typing import List, Optional, NamedTuple
 
 from main.domain.common.entities import DomainModel, ValueObject
 from main.domain.common.errors import DomainError
 from main.domain.model.snapshot import Snapshot, sort_snapshots
 from main.util.localdatetime import LOCAL_TIMEZONE
 
+class Body(NamedTuple):
+    logo_url: str
+    risk_level: int
 
-class AccountType(Enum):
+class AccountType(Body, Enum):
     """
     The type of account (either platform or asset type, i.e. Money) the account is.
     """
 
-    ASB = auto(),
-    BNZ = auto(),
-    ANZ = auto(),
+    # Bank accounts
+    ASB = Body(logo_url="https://cdn.buttercms.com/npRrhoqSTRCqWNlXYHXL",
+               risk_level=1)
+    BNZ = Body(logo_url="https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Bank_of_New_Zealand.svg/1200px-Bank_of_New_Zealand.svg.png",
+               risk_level=1)
+    ANZ = Body(logo_url="https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/ANZ-brand.svg/1200px-ANZ-brand.svg.png",
+               risk_level=1)
 
-    SIMPLICITY = auto(),
-    KIWISAVER = auto(),
+    # Cash
+    CASH = Body(logo_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU8xtQgzPGASFmARo3BX9NtdNPliylgff5KA&usqp=CAU",
+                risk_level=1)
 
-    SHARESIES = auto(),
-    HATCH = auto(),
+    # Investment funds
+    SIMPLICITY = Body(logo_url="https://cdn.buttercms.com/VocLrbXcSvSn7JiSL0UL", risk_level=5)
+    KIWISAVER = Body(logo_url="https://www.ird.govt.nz/-/media/project/ir/home/graphics/kiwisaver/using-kiwisaver-trademark/kiwisaver-logos-for-media/kiwisaver-logo-green-stone-text-white-background.jpg",
+                     risk_level=3)
 
-    CASH = auto()
+    # Stock trading
+    SHARESIES = Body(logo_url="https://images.squarespace-cdn.com/content/v1/58bc788c59cc68b9696b9ee0/1543372882154-5E6PGXVJGOIQU30NTJKJ/sharesies.png",
+                     risk_level=7)
+
+    HATCH = Body(logo_url="https://www.finder.com/niche-builder/5fab5b13231cf.png",
+                 risk_level=7)
 
 
 @dataclass(frozen=True)
